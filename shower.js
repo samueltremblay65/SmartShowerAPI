@@ -1,6 +1,6 @@
 const express = require('express'); 
 const app = express(); 
-const port = 8080;
+const port = 443;
 
 var currentTemp = 25;
 var currentFlow = 80;
