@@ -1,0 +1,17 @@
+{
+  "name": "smartshowerapi",
+  "version": "1.0.0",
+  "description": "Backend/API service for SmartShower",
+  "main": "shower.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "SmartShower"
+  ],
+  "author": "Samuel Tremblay",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
