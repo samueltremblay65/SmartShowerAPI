@@ -47,7 +47,10 @@ app.get('/get', (req, res) => {
 
     if(on) status = "on"; else status="off";
 
-    res.send(`status=${status},time=${currentShower.length},temp=${currentTemp},flow=${currentFlow},target_temp=${targetTemp},targetFlow=${targetFlow}`);
+    var response = {status: status, time:currentShower.length, currentTemperature: currentTemp, currentFlow:currentFlow,
+        targetTemperature:targetTemp, targetFlow:targetFlow}
+
+    res.send(response);
 });
 
 app.get('/history', (req, res) => {
