@@ -39,7 +39,11 @@ app.get('/set', (req, res) => {
 });
 
 app.get('/get', (req, res) => {
-    res.send(`temp=${currentTemp},flow=${currentFlow}`);
+    var status;
+
+    if(on) status = "on"; else status="off";
+
+    res.send(`status=${status},temp=${currentTemp},flow=${currentFlow}`);
 });
 
 app.get('/history', (req, res) => {
