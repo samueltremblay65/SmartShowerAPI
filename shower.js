@@ -22,6 +22,7 @@ app.get('/on', (req, res) => {
 
 app.get('/off', (req, res) => {
     on = false;
+    currentShower = []
     console.log("Shower turned off");
     res.send("Shower turned off");
 });
@@ -43,7 +44,7 @@ app.get('/get', (req, res) => {
 
     if(on) status = "on"; else status="off";
 
-    res.send(`status=${status},temp=${currentTemp},flow=${currentFlow}`);
+    res.send(`status=${status},time=${currentShower.length},temp=${currentTemp},flow=${currentFlow}`);
 });
 
 app.get('/history', (req, res) => {
