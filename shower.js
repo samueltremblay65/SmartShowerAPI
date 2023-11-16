@@ -60,8 +60,6 @@ app.listen(port, '0.0.0.0', function() {
 setInterval(function(){
     if(on)
     {
-        console.log(`Current Temperature: ${currentTemp}`);
-        console.log(`Current Flow: ${currentFlow}`);
         showerTime++;
         currentShower.push(currentTemp);
     }
