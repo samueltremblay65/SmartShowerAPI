@@ -5,6 +5,9 @@ const port = 443;
 var currentTemp = 25;
 var currentFlow = 80;
 
+var targetTemp = 25;
+var targetFlow = 90;
+
 var currentShower = []
 var showerTime = -1;
 
@@ -44,7 +47,7 @@ app.get('/get', (req, res) => {
 
     if(on) status = "on"; else status="off";
 
-    res.send(`status=${status},time=${currentShower.length},temp=${currentTemp},flow=${currentFlow}`);
+    res.send(`status=${status},time=${currentShower.length},temp=${currentTemp},flow=${currentFlow},target_temp=${targetTemp},targetFlow=${targetFlow}`);
 });
 
 app.get('/history', (req, res) => {
