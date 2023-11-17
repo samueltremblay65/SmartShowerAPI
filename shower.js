@@ -2,11 +2,11 @@ const express = require('express');
 const app = express(); 
 const port = 443;
 
-var currentTemp = 25;
-var currentFlow = 80;
-
-var targetTemp = 25;
+var targetTemp = 30;
 var targetFlow = 90;
+
+var currentTemp = 20;
+var currentFlow = 50;
 
 var currentShower = []
 var showerTime = -1;
@@ -35,9 +35,9 @@ app.get('/set', (req, res) => {
     const flow = req.query.flow;
 
     if(temp != null)
-        currentTemp = temp;
+        targetTemp = temp;
     if(flow != null)
-        currentFlow = flow;
+        targetFlow = flow;
 
     res.send("Set successful");
 });
@@ -72,6 +72,10 @@ setInterval(function(){
     if(on)
     {
         showerTime++;
+
+        currentTemperature = Math.round((currentTemperature + targetTemperature) / 2);
+        currentFlow = Math.round((currentFlow + targetFlow) / 2);
+
         currentShower.push(currentTemp);
     }
 }, 1000);
