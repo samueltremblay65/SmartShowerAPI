@@ -7,18 +7,19 @@ const port = 443;
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("dumbshower-firebase-adminsdk-yngfd-b4d0618276.json");
+var serviceAccount = require("/opt/render/project/src/dumbshower-firebase-adminsdk-yngfd-b4d0618276.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
-var currentUser = 0;
-
 const db = getFirestore();
 
+// Get latest user to use the application
+var currentUser = 0;
 getCurrentUser();
 
+// Push statistics to firebase
 async function pushToDatabase(statistic)
 {
     const docRef = db.collection('statistics').doc(currentUser.toString());
@@ -32,6 +33,7 @@ async function pushToDatabase(statistic)
     console.log("Pushing shower data to database");
 }
 
+// Set current user
 async function setCurrentUser(userId)
 {
     const docRef = db.collection('settings').doc("node");
@@ -41,6 +43,7 @@ async function setCurrentUser(userId)
     console.log("Setting current user: " + userId);
 }
 
+// Get active user
 async function getCurrentUser()
 {
     const settingsRef = db.collection('settings').doc('node');
@@ -54,6 +57,7 @@ async function getCurrentUser()
     }
 }
 
+// Mock shower status
 var targetTemperature = 25;
 var targetFlow = 90;
 
@@ -105,6 +109,7 @@ app.get('/get', (req, res) => {
     res.send(response);
 });
 
+// Methods used by real shower
 app.get('/user', (req, res) => {
     const userId = parseInt(req.query.user);
     if(userId != null)
@@ -162,6 +167,7 @@ app.listen(port, '0.0.0.0', function() {
     console.log(`Listening to port ${port}`);
 });
 
+// Mock shower behaviour
 setInterval(function(){
     if(on)
     {
