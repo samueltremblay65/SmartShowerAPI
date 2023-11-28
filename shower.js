@@ -1,8 +1,60 @@
-const express = require('express'); 
+const express = require('express');
+
+const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+
 const app = express(); 
 const port = 443;
 
-var targetTemperature = 30;
+var admin = require("firebase-admin");
+
+var serviceAccount = require("../SmartShowerAPI/dumbshower-firebase-adminsdk-yngfd-b4d0618276.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+var currentUser = 0;
+
+const db = getFirestore();
+
+getCurrentUser();
+
+async function pushToDatabase(statistic)
+{
+    const docRef = db.collection('statistics').doc(currentUser.toString());
+
+    const statisticDict = new Object();
+
+    statisticDict[statistic.uid.toString()] = statistic;
+
+    await docRef.set(statisticDict, { merge: true });
+
+    console.log("Pushing shower data to database");
+}
+
+async function setCurrentUser(userId)
+{
+    const docRef = db.collection('settings').doc("node");
+
+    await docRef.set({currentUser: userId});
+
+    console.log("Setting current user: " + userId);
+}
+
+async function getCurrentUser()
+{
+    const settingsRef = db.collection('settings').doc('node');
+    const doc = await settingsRef.get();
+    
+    if (!doc.exists) {
+        console.log('Could not get currentUser. Using default shower user');
+    } else {
+        currentUser = doc.data().currentUser;
+        console.log("Current user: " + currentUser);
+    }
+}
+
+var targetTemperature = 25;
 var targetFlow = 90;
 
 var currentTemperature = 20;
@@ -53,15 +105,57 @@ app.get('/get', (req, res) => {
     res.send(response);
 });
 
-app.get('/history', (req, res) => {
-    var history_feed = "";
-    currentShower.forEach(element => {
-        history_feed += element.toString() + ",";
-    });
+app.get('/user', (req, res) => {
+    const userId = parseInt(req.query.user);
+    if(userId != null)
+    {
+        currentUser = userId;
+    }
 
-    console.log(currentShower.length);
+    setCurrentUser(currentUser);
 
-    res.send(history_feed);
+    var response = "current user set successfully";
+    res.send(response);
+});
+
+app.get('/push', (req, res) => {
+
+    const queryTemperature = req.query.temp;
+    const queryFlow = req.query.flow;
+    const queryDuration = req.query.duration;
+    const queryWaterUsage = req.query.usage;
+
+    const currentDate = new Date();
+    let uid = Math.floor(Math.random() * 4000000000);
+    let temperature = 0;
+    let flow = 0;
+    let duration = 0;
+    let month = currentDate.getMonth();
+    let presetId = 0;
+    let waterUsage = 0;
+
+    if(queryTemperature != null)
+    {
+        temperature = parseInt(queryTemperature);
+    }
+    if(queryFlow != null)
+    {
+        flow = parseInt(queryFlow);
+    }
+    if(queryDuration != null)
+    {
+        duration = parseInt(queryDuration);
+    }
+    if(queryWaterUsage != null)
+    {
+        waterUsage = parseInt(queryWaterUsage);
+    }
+
+    const statistic = {averageFlow: flow, averageTemperature: temperature, dateTime: currentDate.getTime(), duration: duration, energy:0, month:month, presetId: presetId, uid: uid, waterUsage:waterUsage};
+
+    pushToDatabase(statistic);
+
+    res.send("Set successful");
 });
 
 app.listen(port, '0.0.0.0', function() {
