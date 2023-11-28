@@ -7,7 +7,7 @@ const port = 443;
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("../SmartShowerAPI/dumbshower-firebase-adminsdk-yngfd-b4d0618276.json");
+var serviceAccount = require("dumbshower-firebase-adminsdk-yngfd-b4d0618276.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
