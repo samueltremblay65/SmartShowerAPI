@@ -69,6 +69,8 @@ var showerTime = -1;
 
 var on = false;
 
+var steadyTemp = false;
+
 app.get('/', (req, res) => {
     res.sendFile('main.html', {root: __dirname}); 
 });
@@ -94,6 +96,8 @@ app.get('/set', (req, res) => {
         targetTemperature = parseInt(temp);
     if(flow != null)
         targetFlow = parseInt(flow);
+
+    steadyTemp = false;
 
     res.send("Set successful");
 });
@@ -194,7 +198,12 @@ setInterval(function(){
         currentFlow += Math.round(Math.random() * 5 - 2.5);
         currentTemperature += Math.round(Math.random() * 2 - 1);
 
-        if(Math.abs(targetTemperature - currentTemperature) > 1)
+        if(currentTemperature == targetTemperature)
+        {
+            steadyTemp = true;
+        }
+
+        if(steadyTemp && Math.abs(targetTemperature - currentTemperature) > 1)
         {
             currentTemperature = targetTemperature;
         }
