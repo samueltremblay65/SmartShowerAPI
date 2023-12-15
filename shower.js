@@ -194,6 +194,11 @@ setInterval(function(){
         currentFlow += Math.round(Math.random() * 5 - 2.5);
         currentTemperature += Math.round(Math.random() * 2 - 1);
 
+        if(Math.abs(targetTemperature - currentTemperature) > 1)
+        {
+            currentTemperature = targetTemperature;
+        }
+
         currentShower.push(currentTemperature);
         currentShower.push(currentFlow);
     }
