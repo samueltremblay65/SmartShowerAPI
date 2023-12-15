@@ -207,7 +207,7 @@ setInterval(function(){
 
         if(steadyTemp)
         {
-            targetTemperature = targetTemperature + Math.round(Math.random() * 2 - 1);
+            currentTemperature= targetTemperature + Math.round(Math.random() * 2 - 1);
         }
 
         currentShower.push(currentTemperature);
