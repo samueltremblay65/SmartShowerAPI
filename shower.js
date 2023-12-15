@@ -198,7 +198,7 @@ setInterval(function(){
         currentFlow += Math.round(Math.random() * 5 - 2.5);
         currentTemperature += Math.round(Math.random() * 2 - 1);
 
-        if(currentTemperature == targetTemperature)
+        if(Math.abs(targetTemperature - currentTemperature) <= 1)
         {
             steadyTemp = true;
         }
