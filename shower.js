@@ -8,7 +8,7 @@ const port = 443;
 var admin = require("firebase-admin");
 
 var serviceAccount = require("/opt/render/project/src/smartshower-d62ba-firebase-adminsdk-qco43-5049ad15a1.json");
-
+// var serviceAccount = require("../SmartShowerAPI/smartshower-d62ba-firebase-adminsdk-qco43-5049ad15a1.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
@@ -173,9 +173,28 @@ setInterval(function(){
     {
         showerTime++;
 
-        currentTemperature = Math.round((currentTemperature + targetTemperature) / 2);
-        currentFlow = Math.round((currentFlow + targetFlow) / 2);
+        if(currentTemperature == targetTemperature + 1)
+        {
+            currentTemperature = targetTemperature;
+        }
+        else
+        {
+            currentTemperature = Math.round((2 * currentTemperature + targetTemperature) / 3);
+        }
+
+        if(currentFlow == targetFlow + 1)
+        {
+            currentFlow = targetFlow;
+        }
+        else
+        {
+            currentFlow = Math.round((currentFlow + targetFlow) / 2);
+        }
+
+        currentFlow += Math.round(Math.random() * 5 - 2.5);
+        currentTemperature += Math.round(Math.random() * 2 - 1);
 
         currentShower.push(currentTemperature);
+        currentShower.push(currentFlow);
     }
 }, 1000);
