@@ -203,9 +203,9 @@ setInterval(function(){
             steadyTemp = true;
         }
 
-        if(steadyTemp && Math.abs(targetTemperature - currentTemperature) > 1)
+        if(steadyTemp)
         {
-            currentTemperature = targetTemperature;
+            targetTemperature = targetTemperature + Math.round(Math.random() * 2 - 1);
         }
 
         currentShower.push(currentTemperature);
